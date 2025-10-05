@@ -9,13 +9,11 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# (Opcional) precache del modelo dentro de la imagen:
-# Cambia el nombre si usas MiniLM.
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('distiluse-base-multilingual-cased-v2')"
+# (Opcional) precache del modelo para que la carga en background sea más corta
+# RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('distiluse-base-multilingual-cased-v2')"
 
 COPY . .
 
-# Cloud Run escucha en 0.0.0.0:8080
 ENV PORT=8080
 EXPOSE 8080
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["sh","-c","exec gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:${PORT} --workers 1 --timeout 0"]
