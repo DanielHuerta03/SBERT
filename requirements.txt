@@ -1,5 +1,6 @@
 fastapi
 uvicorn[standard]
+gunicorn
 sentence-transformers
-torch
+torch==2.2.2
 pydantic
