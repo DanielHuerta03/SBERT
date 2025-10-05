@@ -10,8 +10,6 @@ _model = None
 def get_model():
     global _model
     if _model is None:
-        # ⇩ ⇩ Si quieres menos RAM, usa MiniLM:
-        # _model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
         _model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
     return _model
 
@@ -188,3 +186,4 @@ def generar_embedding(req: EmbeddingRequest):
 def similaridad_explicable(req: SimilarityExplainRequest):
     resultados, explicaciones = calcular_similitud(req.puesto, req.candidato, equivalencias_carreras)
     return {"resultados": resultados, "explicaciones": explicaciones}
+
